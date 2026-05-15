@@ -3,7 +3,6 @@ import json
 import os
 import time
 from utils.downloader import download_model
-from utils.cli_wrapper import run_sd_cli
 from utils.sd_python_manager import python_manager
 
 # 加载模型配置
