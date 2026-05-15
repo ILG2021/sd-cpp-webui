@@ -1,0 +1,208 @@
+{
+    "models": {
+        "Stable-Diffusion-v1.4": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "CompVis/stable-diffusion-v-1-4-original", "filename": "sd-v1-4.ckpt", "local_path": "models/sd-v1-4.ckpt" }
+            },
+            "default_params": { "cfg-scale": 7.5, "sampling-method": "euler_a", "steps": 25, "W": 512, "H": 512 }
+        },
+        "Stable-Diffusion-v1.5": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "runwayml/stable-diffusion-v1-5", "filename": "v1-5-pruned-emaonly.safetensors", "local_path": "models/v1-5-pruned-emaonly.safetensors" }
+            },
+            "default_params": { "cfg-scale": 7.5, "sampling-method": "euler", "steps": 25, "W": 512, "H": 512 }
+        },
+        "Stable-Diffusion-v2.1": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "stabilityai/stable-diffusion-2-1", "filename": "v2-1_768-ema-pruned.safetensors", "local_path": "models/v2-1_768-ema-pruned.safetensors" }
+            },
+            "default_params": { "cfg-scale": 7.5, "sampling-method": "euler_a", "steps": 25, "W": 768, "H": 768 }
+        },
+        "SD-Turbo": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "stabilityai/sd-turbo", "filename": "sd_turbo.safetensors", "local_path": "models/sd_turbo.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler_a", "steps": 1, "W": 512, "H": 512 }
+        },
+        "SDXL-Base-1.0": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "stabilityai/stable-diffusion-xl-base-1.0", "filename": "sd_xl_base_1.0.safetensors", "local_path": "models/sd_xl_base_1.0.safetensors" }
+            },
+            "default_params": { "cfg-scale": 5.0, "sampling-method": "euler", "steps": 30, "W": 1024, "H": 1024 }
+        },
+        "SDXL-Turbo": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "stabilityai/sdxl-turbo", "filename": "sdxl_turbo.safetensors", "local_path": "models/sdxl_turbo.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler_a", "steps": 1, "W": 512, "H": 512 }
+        },
+        "SSD-1B-Distilled": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "segmind/SSD-1B", "filename": "SSD-1B-A1111.safetensors", "local_path": "models/SSD-1B-A1111.safetensors" }
+            },
+            "default_params": { "cfg-scale": 7.0, "sampling-method": "euler", "steps": 25, "W": 1024, "H": 1024 }
+        },
+        "Segmind-Vega": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "segmind/Segmind-Vega", "filename": "segmind-vega.safetensors", "local_path": "models/segmind-vega.safetensors" }
+            },
+            "default_params": { "cfg-scale": 7.0, "sampling-method": "euler", "steps": 25, "W": 1024, "H": 1024 }
+        },
+        "SDXS-512-Tiny": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "akleine/sdxs-512", "filename": "sdxs-512.safetensors", "local_path": "models/sdxs-512.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 1, "W": 512, "H": 512 }
+        },
+        "SD-3-Medium": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "stabilityai/stable-diffusion-3-medium", "filename": "sd3_medium.safetensors", "local_path": "models/sd3_medium.safetensors" }
+            },
+            "default_params": { "cfg-scale": 4.5, "sampling-method": "euler", "steps": 28, "W": 1024, "H": 1024 }
+        },
+        "SD-3.5-Large": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "stabilityai/stable-diffusion-3.5-large", "filename": "sd3.5_large.safetensors", "local_path": "models/sd3.5_large.safetensors" },
+                "clip_l": { "repo": "comfyanonymous/flux_text_encoders", "filename": "clip_l.safetensors", "local_path": "models/clip_l.safetensors" },
+                "clip_g": { "repo": "comfyanonymous/flux_text_encoders", "filename": "clip_g.safetensors", "local_path": "models/clip_g.safetensors" },
+                "t5xxl": { "repo": "comfyanonymous/flux_text_encoders", "filename": "t5xxl_fp16.safetensors", "local_path": "models/t5xxl_fp16.safetensors" }
+            },
+            "default_params": { "cfg-scale": 4.5, "sampling-method": "euler", "steps": 28, "W": 1024, "H": 1024 }
+        },
+        "Flux.1-dev": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "black-forest-labs/FLUX.1-dev", "filename": "flux1-dev.safetensors", "local_path": "models/flux1-dev.safetensors" },
+                "vae": { "repo": "black-forest-labs/FLUX.1-dev", "filename": "ae.safetensors", "local_path": "models/ae.safetensors" },
+                "clip_l": { "repo": "comfyanonymous/flux_text_encoders", "filename": "clip_l.safetensors", "local_path": "models/clip_l.safetensors" },
+                "t5xxl": { "repo": "comfyanonymous/flux_text_encoders", "filename": "t5xxl_fp16.safetensors", "local_path": "models/t5xxl_fp16.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 20, "W": 1024, "H": 1024, "clip-on-cpu": true }
+        },
+        "Flux.1-schnell": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "black-forest-labs/FLUX.1-schnell", "filename": "flux1-schnell.safetensors", "local_path": "models/flux1-schnell.safetensors" },
+                "vae": { "repo": "black-forest-labs/FLUX.1-dev", "filename": "ae.safetensors", "local_path": "models/ae.safetensors" },
+                "clip_l": { "repo": "comfyanonymous/flux_text_encoders", "filename": "clip_l.safetensors", "local_path": "models/clip_l.safetensors" },
+                "t5xxl": { "repo": "comfyanonymous/flux_text_encoders", "filename": "t5xxl_fp16.safetensors", "local_path": "models/t5xxl_fp16.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 4, "W": 1024, "H": 1024, "clip-on-cpu": true }
+        },
+        "Flux.2-dev": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "city96/FLUX.2-dev-gguf", "filename": "flux2-dev-Q8_0.gguf", "local_path": "models/flux2-dev-Q8_0.gguf" },
+                "vae": { "repo": "black-forest-labs/FLUX.2-dev", "filename": "flux2_ae.safetensors", "local_path": "models/flux2_ae.safetensors" },
+                "llm": { "repo": "unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF", "filename": "Mistral-Small-3.2-24B-Instruct-2506-Q8_0.gguf", "local_path": "models/Mistral-Small-3.2-24B-Instruct-2506-Q8_0.gguf" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 20, "W": 1024, "H": 1024, "diffusion-fa": true, "offload-to-cpu": true }
+        },
+        "Flux.2-klein-4B": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "leejet/FLUX.2-klein-4B-GGUF", "filename": "flux-2-klein-4b-Q8_0.gguf", "local_path": "models/flux-2-klein-4b-Q8_0.gguf" },
+                "vae": { "repo": "black-forest-labs/FLUX.2-dev", "filename": "flux2_ae.safetensors", "local_path": "models/flux2_ae.safetensors" },
+                "llm": { "repo": "unsloth/Qwen3-4B-GGUF", "filename": "Qwen3-4B-Q8_0.gguf", "local_path": "models/Qwen3-4B-Q8_0.gguf" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 4, "W": 1024, "H": 1024, "diffusion-fa": true, "offload-to-cpu": true }
+        },
+        "Wan2.1-T2V-1.3B": {
+            "type": "vid_gen",
+            "files": {
+                "diffusion-model": { "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged", "subfolder": "split_files/diffusion_models", "filename": "wan2.1_t2v_1.3B_fp16.safetensors", "local_path": "models/wan2.1_t2v_1.3B_fp16.safetensors" },
+                "vae": { "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged", "subfolder": "split_files/vae", "filename": "wan_2.1_vae.safetensors", "local_path": "models/wan_2.1_vae.safetensors" },
+                "t5xxl": { "repo": "city96/umt5-xxl-encoder-gguf", "filename": "umt5-xxl-encoder-Q8_0.gguf", "local_path": "models/umt5-xxl-encoder-Q8_0.gguf" }
+            },
+            "default_params": { "cfg-scale": 6.0, "sampling-method": "euler", "steps": 20, "video-frames": 33, "flow-shift": 3.0, "W": 832, "H": 480 }
+        },
+        "Wan2.2-T2V-A14B-GGUF": {
+            "type": "vid_gen",
+            "files": {
+                "diffusion-model": { "repo": "QuantStack/Wan2.2-T2V-A14B-GGUF", "filename": "Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf", "local_path": "models/Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf" },
+                "high-noise-diffusion-model": { "repo": "QuantStack/Wan2.2-T2V-A14B-GGUF", "filename": "Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf", "local_path": "models/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf" },
+                "vae": { "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged", "subfolder": "split_files/vae", "filename": "wan_2.1_vae.safetensors", "local_path": "models/wan_2.1_vae.safetensors" },
+                "t5xxl": { "repo": "city96/umt5-xxl-encoder-gguf", "filename": "umt5-xxl-encoder-Q8_0.gguf", "local_path": "models/umt5-xxl-encoder-Q8_0.gguf" }
+            },
+            "default_params": { "cfg-scale": 3.5, "sampling-method": "euler", "steps": 10, "high-noise-cfg-scale": 3.5, "high-noise-sampling-method": "euler", "high-noise-steps": 8, "video-frames": 33, "flow-shift": 3.0, "W": 832, "H": 480, "offload-to-cpu": true }
+        },
+        "Chroma-v40": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "silveroxides/Chroma-GGUF", "filename": "chroma-unlocked-v40-q8_0.gguf", "local_path": "models/chroma-unlocked-v40-q8_0.gguf" },
+                "vae": { "repo": "black-forest-labs/FLUX.1-dev", "filename": "ae.safetensors", "local_path": "models/ae.safetensors" },
+                "t5xxl": { "repo": "comfyanonymous/flux_text_encoders", "filename": "t5xxl_fp16.safetensors", "local_path": "models/t5xxl_fp16.safetensors" }
+            },
+            "default_params": { "cfg-scale": 4.0, "sampling-method": "euler", "steps": 25, "W": 1024, "H": 1024, "chroma-disable-dit-mask": true, "clip-on-cpu": true }
+        },
+        "Qwen-Image": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "Comfy-Org/Qwen-Image_ComfyUI", "subfolder": "checkpoints", "filename": "qwen_image_bf16.safetensors", "local_path": "models/qwen_image_bf16.safetensors" },
+                "vae": { "repo": "Comfy-Org/Qwen-Image_ComfyUI", "subfolder": "split_files/vae", "filename": "qwen_image_vae.safetensors", "local_path": "models/qwen_image_vae.safetensors" },
+                "llm": { "repo": "Comfy-Org/Qwen-Image_ComfyUI", "subfolder": "split_files/text_encoders", "filename": "qwen_3_06b_instruct.safetensors", "local_path": "models/qwen_3_06b_instruct.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 25, "W": 1024, "H": 1024, "offload-to-cpu": true, "diffusion-fa": true }
+        },
+        "Z-Image-Turbo": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "Comfy-Org/Z-Image-Turbo_ComfyUI", "subfolder": "checkpoints", "filename": "z_image_turbo_bf16.safetensors", "local_path": "models/z_image_turbo_bf16.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 1, "W": 1024, "H": 1024 }
+        },
+        "ERNIE-Image-Turbo": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "Comfy-Org/ERNIE-Image-Turbo_ComfyUI", "subfolder": "checkpoints", "filename": "ernie_image_turbo_bf16.safetensors", "local_path": "models/ernie_image_turbo_bf16.safetensors" },
+                "vae": { "repo": "Comfy-Org/Qwen-Image_ComfyUI", "subfolder": "split_files/vae", "filename": "qwen_image_vae.safetensors", "local_path": "models/qwen_image_vae.safetensors" },
+                "llm": { "repo": "circlestone-labs/Anima", "subfolder": "split_files/text_encoders", "filename": "qwen_3_06b_base.safetensors", "local_path": "models/qwen_3_06b_base.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 1, "W": 1024, "H": 1024, "offload-to-cpu": true, "diffusion-fa": true }
+        },
+        "Anima-Soul": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "circlestone-labs/Anima", "subfolder": "split_files/diffusion_models", "filename": "anima-preview.safetensors", "local_path": "models/anima-preview.safetensors" },
+                "vae": { "repo": "circlestone-labs/Anima", "subfolder": "split_files/vae", "filename": "qwen_image_vae.safetensors", "local_path": "models/qwen_image_vae.safetensors" },
+                "llm": { "repo": "circlestone-labs/Anima", "subfolder": "split_files/text_encoders", "filename": "qwen_3_06b_base.safetensors", "local_path": "models/qwen_3_06b_base.safetensors" }
+            },
+            "default_params": { "cfg-scale": 6.0, "sampling-method": "euler", "steps": 25, "W": 1024, "H": 1024, "offload-to-cpu": true, "diffusion-fa": true }
+        },
+        "Ovis-Image-7B": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "Comfy-Org/Ovis-Image-7B_ComfyUI", "subfolder": "checkpoints", "filename": "ovis_image_7b_bf16.safetensors", "local_path": "models/ovis_image_7b_bf16.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 25, "W": 1024, "H": 1024, "offload-to-cpu": true, "diffusion-fa": true }
+        },
+        "Qwen-Image-Edit-2509": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "QuantStack/Qwen-Image-Edit-2509-GGUF", "filename": "Qwen-Image-Edit-2509-Q8_0.gguf", "local_path": "models/Qwen-Image-Edit-2509-Q8_0.gguf" },
+                "vae": { "repo": "Comfy-Org/Qwen-Image_ComfyUI", "subfolder": "split_files/vae", "filename": "qwen_image_vae.safetensors", "local_path": "models/qwen_image_vae.safetensors" },
+                "llm": { "repo": "mradermacher/Qwen2.5-VL-7B-Instruct-GGUF", "filename": "Qwen2.5-VL-7B-Instruct.Q8_0.gguf", "local_path": "models/Qwen2.5-VL-7B-Instruct-Q8_0.gguf" },
+                "llm_vision": { "repo": "QuantStack/Qwen2.5-VL-7B-Instruct-mmproj-GGUF", "filename": "Qwen2.5-VL-7B-Instruct.mmproj-Q8_0.gguf", "local_path": "models/Qwen2.5-VL-7B-Instruct.mmproj-Q8_0.gguf" }
+            },
+            "default_params": { "cfg-scale": 2.5, "sampling-method": "euler", "steps": 25, "W": 1024, "H": 1024, "offload-to-cpu": true, "diffusion-fa": true, "flow-shift": 3.0 }
+        },
+        "HiDream-O1-Image": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": { "repo": "Comfy-Org/HiDream-O1-Image", "subfolder": "checkpoints", "filename": "hidream_o1_image_dev_bf16.safetensors", "local_path": "models/hidream_o1_image_dev_bf16.safetensors" }
+            },
+            "default_params": { "cfg-scale": 1.0, "sampling-method": "euler", "steps": 25, "W": 1024, "H": 1024 }
+        }
+    }
+}
