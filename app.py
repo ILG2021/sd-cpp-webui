@@ -138,9 +138,11 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
     params["o"] = output_file
 
     yield None, "正在通过 CLI 开始生成..."
+    print("正在通过 CLI 开始生成...")
     log_output = ""
     for log in run_sd_cli(config["type"], params, model_paths):
         log_output = log
+        print("log", log)
         yield None, log_output
 
     if os.path.exists(output_file):

@@ -1,16 +1,15 @@
 import subprocess
 import os
 
-def run_sd_cli(mode, params, model_paths, cli_base_path="tools/stable-diffusion.cpp"):
+def run_sd_cli(mode, params, model_paths, cli_base_path=os.path.join("tools","stable-diffusion-cpp")):
     """
     Constructs and runs the sd-cli command.
     """
     # Determine CLI path (checking both bin and bin/Release)
-    cli_exe = os.path.join(cli_base_path, "bin", "sd-cli.exe")
-    if not os.path.exists(cli_exe):
-        cli_exe = os.path.join(cli_base_path, "bin", "Release", "sd-cli.exe")
+    cli_exe = os.path.join(cli_base_path, "sd-cli.exe")
     
     if not os.path.exists(cli_exe):
+        print("sd-cli.exe not found")
         return f"Error: sd-cli.exe not found at {cli_exe}. Please check the path."
 
     cmd = [cli_exe]
@@ -85,4 +84,5 @@ def run_sd_cli(mode, params, model_paths, cli_base_path="tools/stable-diffusion.
         process.wait()
         
     except Exception as e:
+        print(e)
         yield f"Error executing CLI: {str(e)}"
