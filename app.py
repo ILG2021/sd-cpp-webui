@@ -74,6 +74,7 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
             yield output_file, "生成成功 (服务器模式)。"
             return
         except Exception as e:
+            print(e)
             yield None, f"服务器模式失败，回退到 CLI 模式: {str(e)}"
             # Fallback to CLI
     
@@ -120,7 +121,7 @@ def create_gen_tab(models_dict, is_video=False):
         with gr.Column(scale=1):
             with gr.Row():
                 model_name = gr.Dropdown(choices=list(models_dict.keys()), value=list(models_dict.keys())[0], label="选择模型", scale=3)
-                use_server_mode = gr.Checkbox(label="开启服务器模式 (保持模型在内存中)", value=False, scale=1, visible=not is_video)
+                use_server_mode = gr.Checkbox(label="开启服务器模式 (保持模型在内存中)", value=True, scale=1, visible=not is_video)
             
             prompt = gr.Textbox(label="提示词 (Prompt)", placeholder="输入你想要生成的画面描述...", lines=3)
             negative_prompt = gr.Textbox(label="反向提示词 (Negative Prompt)", placeholder="输入你不想要出现的元素...", lines=2)

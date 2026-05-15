@@ -9,8 +9,9 @@
                     "local_path": "models/Z-Image-Turbo/z_image_turbo-Q8_0.gguf"
                 },
                 "vae": {
-                    "repo": "black-forest-labs/FLUX.1-schnell",
-                    "filename": "ae.safetensors",
+                    "repo": "Tongyi-MAI/Z-Image-Turbo",
+                    "subfolder": "vae",
+                    "filename": "diffusion_pytorch_model.safetensors",
                     "local_path": "models/Z-Image-Turbo/ae.safetensors"
                 },
                 "llm": {

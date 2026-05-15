@@ -6,8 +6,9 @@ import json
 import signal
 from pathlib import Path
 
+
 class SDServerManager:
-    def __init__(self, cli_base_path="tools/stable-diffusion.cpp", host="127.0.0.1", port=8080):
+    def __init__(self, cli_base_path=os.path.join("tools", "stable-diffusion-cpp"), host="127.0.0.1", port=8081):
         self.cli_base_path = cli_base_path
         self.host = host
         self.port = port
@@ -18,7 +19,7 @@ class SDServerManager:
         """Find the sd-server binary (cross-platform)"""
         ext = ".exe" if os.name == "nt" else ""
         exe_names = [f"sd-server{ext}", f"stable-diffusion-server{ext}"]
-        
+
         for name in exe_names:
             paths = [
                 os.path.join(self.cli_base_path, "bin", name),
@@ -34,7 +35,7 @@ class SDServerManager:
         """Check if the server is alive and responding"""
         if self.process is None or self.process.poll() is not None:
             return False
-        
+
         endpoints = ["/health", "/v1/models", "/"]
         for ep in endpoints:
             try:
@@ -71,8 +72,8 @@ class SDServerManager:
         self.stop()
 
         # Build command (similar to sd-cli but for server)
-        cmd = [exe, "--host", self.host, "--port", str(self.port)]
-        
+        cmd = [exe, "--listen-ip", self.host, "--listen-port", str(self.port)]
+
         # Add model paths (logic from cli_wrapper)
         for key, path in model_paths.items():
             if key == "diffusion-model":
@@ -125,21 +126,21 @@ class SDServerManager:
             if self.process.poll() is not None:
                 out, _ = self.process.communicate()
                 raise RuntimeError(f"SD server failed to start:\n{out}")
-        
+
         self.stop()
         raise TimeoutError("SD server timed out while starting.")
 
-    def generate(self, prompt, negative_prompt, steps, cfg_scale, width, height, sampling_method, seed, 
+    def generate(self, prompt, negative_prompt, steps, cfg_scale, width, height, sampling_method, seed,
                  reference_image=None, control_net_path=None, **kwargs):
         """Send a generation request to the server"""
         url = f"http://{self.host}:{self.port}/v1/images/generations"
-        
+
         # Construct payload with both standard OpenAI and sd-server specific fields
         payload = {
             "prompt": prompt,
             "negative_prompt": negative_prompt,
             "n": 1,
-            "width": width,   # Some versions prefer explicit W/H
+            "width": width,  # Some versions prefer explicit W/H
             "height": height,
             "size": f"{width}x{height}",
             "steps": steps,
@@ -149,15 +150,16 @@ class SDServerManager:
             "seed": seed,
             "response_format": "b64_json"
         }
-        
+
         # Handle reference images (img2img/edit) via base64 if server supports it
         # Note: standard sd-server might need files via multipart or specific base64 fields
         if reference_image and os.path.exists(reference_image):
             import base64
             with open(reference_image, "rb") as f:
                 img_b64 = base64.b64encode(f.read()).decode('utf-8')
-                payload["image"] = img_b64 # Common field for img2img in these servers
-        
+                payload["image"] = img_b64  # Common field for img2img in these servers
+        print("url", url)
+        print("paylaod",payload)
         response = requests.post(url, json=payload, timeout=300)
         if response.status_code == 200:
             data = response.json()
@@ -170,6 +172,7 @@ class SDServerManager:
             return output_file
         else:
             raise RuntimeError(f"Server error: {response.text}")
+
 
 # Global instance
 server_manager = SDServerManager()
