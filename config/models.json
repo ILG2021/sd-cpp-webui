@@ -22,8 +22,8 @@
             },
             "default_params": {
                 "cfg-scale": 1.0,
-                "sampling-method": "euler",
-                "steps": 1,
+                "sampling-method": "dpm++2s_a",
+                "steps": 9,
                 "W": 1024,
                 "H": 1024,
                 "diffusion-fa": true,
