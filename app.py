@@ -4,7 +4,7 @@ import os
 import time
 from utils.downloader import download_model
 from utils.cli_wrapper import run_sd_cli
-from utils.sd_server_manager import server_manager
+from utils.sd_python_manager import python_manager
 
 # 加载模型配置
 with open("config/models.json", "r") as f:
@@ -36,7 +36,7 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
                   diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir,
                   taesd_path, tae_path, cache_mode, cache_option, scm_mask, scm_policy,
                   video_frames, flow_shift, reference_image, control_net_path, upscale_model,
-                  pm_images_dir, pm_style_strength, use_server_mode):
+                  pm_images_dir, pm_style_strength, use_python_mode):
     
     if model_name not in MODELS_CONFIG:
         return None, "错误：未找到所选模型的配置。"
@@ -56,8 +56,8 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
     params = {
         "p": prompt,
         "n": negative_prompt,
-        "steps": defaults.get("steps"),
-        "cfg-scale": defaults.get("cfg-scale"),
+        "steps": defaults.get("steps", 25),
+        "cfg-scale": defaults.get("cfg-scale", 7.5),
         "W": width,
         "H": height,
         "sampling-method": defaults.get("sampling-method", "euler"),
@@ -80,46 +80,58 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
     if taesd_path: model_paths["taesd"] = taesd_path
     if tae_path: model_paths["tae"] = tae_path
 
-    # --- 服务器模式处理 ---
-    if use_server_mode:
-        yield None, f"正在启动服务器模式并加载模型 {model_name} (这可能需要一些时间)..."
+    # --- Python 绑定模式 (持久化加载) ---
+    if use_python_mode:
+        if not python_manager.is_available():
+            yield None, "错误：stable-diffusion-cpp-python 未安装。请运行 pip install stable-diffusion-cpp-python"
+            return
+
+        yield None, f"正在加载模型 {model_name} 到内存 (首次加载可能较慢)..."
         try:
-            server_manager.start(model_name, model_paths, params)
-            yield None, "服务器已就绪，正在发送生成请求..."
+            # 合并模型路径到 config 用于加载
+            load_config = config.copy()
+            if "files" not in load_config: load_config["files"] = {}
+            for k, v in model_paths.items():
+                if k not in load_config["files"]:
+                    load_config["files"][k] = {"local_path": v}
+                else:
+                    load_config["files"][k]["local_path"] = v
+
+            python_manager.load_model(model_name, load_config, lora_model_dir)
+            yield None, "模型已就绪，开始生成..."
             
-            # 解析 LoRA
-            clean_p, lora_list = parse_loras_from_prompt(prompt)
+            # 解析 LoRA (Python 绑定通过 prompt 支持 LoRA)
+            # 但我们也支持传递 init_image 等
             
             if config["type"] == "vid_gen":
-                gen_proc = server_manager.generate_video(
-                    clean_p, negative_prompt, video_frames, width, height,
+                gen_proc = python_manager.generate_video(
+                    prompt, negative_prompt, video_frames, width, height,
                     steps=params["steps"], cfg_scale=params["cfg-scale"]
                 )
             else:
-                gen_proc = server_manager.generate(
-                    clean_p, negative_prompt, params["steps"], params["cfg-scale"], width, height, params["sampling-method"], params["seed"],
-                    reference_image=reference_image, control_net_path=control_net_path,
-                    cache_mode=cache_mode, cache_option=cache_option, scm_mask=scm_mask, scm_policy=scm_policy,
-                    lora_list=lora_list
+                gen_proc = python_manager.generate(
+                    prompt, negative_prompt, params["steps"], params["cfg-scale"], width, height, params["sampling-method"], params["seed"],
+                    init_image=reference_image, 
+                    strength=0.7 # 默认强度
                 )
             
             output_file = None
             for update in gen_proc:
-                if isinstance(update, str) and (update.endswith(".png") or update.endswith(".webp")):
+                if isinstance(update, str) and (update.endswith(".png") or update.endswith(".webp") or update.endswith(".webm")):
                     output_file = update
                 else:
                     yield None, update
             
             if output_file:
-                yield output_file, "生成成功 (服务器模式)。"
+                yield output_file, "生成成功 (Python 模式)。"
             else:
-                yield None, "服务器模式未返回文件。"
+                yield None, "生成失败。"
             return
         except Exception as e:
             import traceback
             traceback.print_exc()
-            yield None, f"服务器模式失败，回退到 CLI 模式: {str(e)}"
-            # Fallback to CLI
+            yield None, f"Python 模式失败: {str(e)}"
+            return
     
     # --- 标准 CLI 模式 ---
     if config["type"] == "vid_gen":
@@ -217,7 +229,7 @@ def create_gen_tab(models_dict, is_video=False):
 
             with gr.Row():
                 generate_btn = gr.Button("🔥 立即生成", variant="primary", scale=3)
-                stop_server_btn = gr.Button("⏹️ 停止服务器", variant="secondary", scale=1)
+                unload_model_btn = gr.Button("⏹️ 卸载模型 (释放显存)", variant="secondary", scale=1)
 
         with gr.Column(scale=1):
             output_display = gr.File(label="生成结果")
@@ -236,11 +248,16 @@ def create_gen_tab(models_dict, is_video=False):
 
     model_name.change(update_model_defaults, inputs=[model_name], outputs=[width, height, diffusion_fa, offload_to_cpu, clip_on_cpu])
 
-    def stop_server_action():
-        server_manager.stop()
-        return "服务器已停止，显存已释放。"
+    def unload_model_action():
+        import gc
+        if python_manager.instance:
+            python_manager.instance = None
+            python_manager.current_model_id = None
+            gc.collect()
+            return "模型已从内存卸载，显存已释放。"
+        return "当前没有已加载的模型。"
 
-    stop_server_btn.click(stop_server_action, outputs=[log_display])
+    unload_model_btn.click(unload_model_action, outputs=[log_display])
 
     generate_btn.click(
         generate_call,
