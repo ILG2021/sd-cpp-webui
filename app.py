@@ -1,8 +1,7 @@
 from utils.downloader import win_install_drivers
-from platform import platform
 import gradio as gr
 import json
-import os
+import platform
 import time
 from utils.downloader import download_model
 from utils.sd_python_manager import python_manager
@@ -244,5 +243,6 @@ with gr.Blocks(title="SD.cpp 桌面版 WebUI") as demo:
 
 if __name__ == "__main__":
     if platform.system() == "Windows":
+        print("window")
         win_install_drivers()
-    demo.queue().launch()
+    demo.queue().launch(inbrowser=True)
