@@ -13,7 +13,7 @@ with open("config/models.json", "r") as f:
 IMAGE_MODELS = {k: v for k, v in MODELS_CONFIG.items() if v["type"] != "vid_gen"}
 VIDEO_MODELS = {k: v for k, v in MODELS_CONFIG.items() if v["type"] == "vid_gen"}
 
-def generate_call(model_name, prompt, negative_prompt, width, height, sampling_method, seed,
+def generate_call(model_name, prompt, negative_prompt, width, height, seed,
                   diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir,
                   taesd_path, tae_path, cache_mode, cache_option, scm_mask, scm_policy,
                   video_frames, flow_shift, reference_image, control_net_path, upscale_model,
@@ -41,7 +41,7 @@ def generate_call(model_name, prompt, negative_prompt, width, height, sampling_m
         "cfg-scale": defaults.get("cfg-scale"),
         "W": width,
         "H": height,
-        "sampling-method": sampling_method,
+        "sampling-method": defaults.get("sampling-method", "euler"),
         "seed": seed if seed != -1 else int(time.time()),
         "diffusion-fa": diffusion_fa,
         "offload-to-cpu": offload_to_cpu,
@@ -68,7 +68,7 @@ def generate_call(model_name, prompt, negative_prompt, width, height, sampling_m
             server_manager.start(model_name, model_paths, params)
             yield None, "服务器已就绪，正在发送生成请求..."
             output_file = server_manager.generate(
-                prompt, negative_prompt, params["steps"], params["cfg-scale"], width, height, sampling_method, params["seed"],
+                prompt, negative_prompt, params["steps"], params["cfg-scale"], width, height, params["sampling-method"], params["seed"],
                 reference_image=reference_image, control_net_path=control_net_path
             )
             yield output_file, "生成成功 (服务器模式)。"
@@ -130,7 +130,6 @@ def create_gen_tab(models_dict, is_video=False):
                     with gr.Row():
                         width = gr.Slider(minimum=256, maximum=2048, step=64, value=1024, label="宽度")
                         height = gr.Slider(minimum=256, maximum=2048, step=64, value=1024, label="高度")
-                    sampling_method = gr.Dropdown(choices=["euler", "euler_a", "heun", "dpm2", "dpm++2s_a", "dpm++2m", "dpm++2m_v2", "lcm"], value="euler", label="采样方法")
                     seed = gr.Number(value=-1, label="随机种子 (Seed, -1为随机)")
 
                 with gr.Tab("参考图/视频"):
@@ -201,7 +200,7 @@ def create_gen_tab(models_dict, is_video=False):
     generate_btn.click(
         generate_call,
         inputs=[
-            model_name, prompt, negative_prompt, width, height, sampling_method, seed,
+            model_name, prompt, negative_prompt, width, height, seed,
             diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir,
             taesd_path, tae_path, cache_mode, cache_option, scm_mask, scm_policy,
             video_frames, flow_shift, reference_image, control_net_path, upscale_model, pm_images_dir, pm_style_strength,
