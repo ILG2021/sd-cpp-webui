@@ -13,6 +13,25 @@ with open("config/models.json", "r") as f:
 IMAGE_MODELS = {k: v for k, v in MODELS_CONFIG.items() if v["type"] != "vid_gen"}
 VIDEO_MODELS = {k: v for k, v in MODELS_CONFIG.items() if v["type"] == "vid_gen"}
 
+def parse_loras_from_prompt(prompt):
+    """Simple parser to extract <lora:name:weight> from prompt"""
+    import re
+    loras = []
+    # Match <lora:filename:multiplier>
+    pattern = r"<lora:([^:]+):([^>]+)>"
+    matches = re.findall(pattern, prompt)
+    for name, weight in matches:
+        try:
+            loras.append({
+                "path": name if name.endswith(".safetensors") else f"{name}.safetensors",
+                "multiplier": float(weight)
+            })
+        except:
+            continue
+    # Clean prompt
+    clean_prompt = re.sub(pattern, "", prompt).strip()
+    return clean_prompt, loras
+
 def generate_call(model_name, prompt, negative_prompt, width, height, seed,
                   diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir,
                   taesd_path, tae_path, cache_mode, cache_option, scm_mask, scm_policy,
@@ -62,19 +81,32 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
     if tae_path: model_paths["tae"] = tae_path
 
     # --- 服务器模式处理 ---
-    if use_server_mode and config["type"] != "vid_gen":
+    if use_server_mode:
         yield None, f"正在启动服务器模式并加载模型 {model_name} (这可能需要一些时间)..."
         try:
             server_manager.start(model_name, model_paths, params)
             yield None, "服务器已就绪，正在发送生成请求..."
-            output_file = server_manager.generate(
-                prompt, negative_prompt, params["steps"], params["cfg-scale"], width, height, params["sampling-method"], params["seed"],
-                reference_image=reference_image, control_net_path=control_net_path
-            )
+            
+            # 解析 LoRA
+            clean_p, lora_list = parse_loras_from_prompt(prompt)
+            
+            if config["type"] == "vid_gen":
+                output_file = server_manager.generate_video(
+                    clean_p, negative_prompt, video_frames, width, height,
+                    steps=params["steps"], cfg_scale=params["cfg-scale"]
+                )
+            else:
+                output_file = server_manager.generate(
+                    clean_p, negative_prompt, params["steps"], params["cfg-scale"], width, height, params["sampling-method"], params["seed"],
+                    reference_image=reference_image, control_net_path=control_net_path,
+                    cache_mode=cache_mode, cache_option=cache_option, scm_mask=scm_mask, scm_policy=scm_policy,
+                    lora_list=lora_list
+                )
             yield output_file, "生成成功 (服务器模式)。"
             return
         except Exception as e:
-            print(e)
+            import traceback
+            traceback.print_exc()
             yield None, f"服务器模式失败，回退到 CLI 模式: {str(e)}"
             # Fallback to CLI
     
@@ -121,9 +153,9 @@ def create_gen_tab(models_dict, is_video=False):
         with gr.Column(scale=1):
             with gr.Row():
                 model_name = gr.Dropdown(choices=list(models_dict.keys()), value=list(models_dict.keys())[0], label="选择模型", scale=3)
-                use_server_mode = gr.Checkbox(label="开启服务器模式 (保持模型在内存中)", value=True, scale=1, visible=not is_video)
+                use_server_mode = gr.Checkbox(label="开启服务器模式 (保持模型在内存中)", value=True, scale=1)
             
-            prompt = gr.Textbox(label="提示词 (Prompt)", placeholder="输入你想要生成的画面描述...", lines=3)
+            prompt = gr.Textbox(label="提示词 (Prompt)", placeholder="输入你想要生成的画面描述... (支持 <lora:name:weight> 语法)", lines=3)
             negative_prompt = gr.Textbox(label="反向提示词 (Negative Prompt)", placeholder="输入你不想要出现的元素...", lines=2)
             
             with gr.Tabs():
@@ -172,7 +204,7 @@ def create_gen_tab(models_dict, is_video=False):
 
             with gr.Row():
                 generate_btn = gr.Button("🔥 立即生成", variant="primary", scale=3)
-                stop_server_btn = gr.Button("⏹️ 停止服务器", variant="secondary", scale=1, visible=not is_video)
+                stop_server_btn = gr.Button("⏹️ 停止服务器", variant="secondary", scale=1)
 
         with gr.Column(scale=1):
             output_display = gr.File(label="生成结果")
@@ -195,8 +227,7 @@ def create_gen_tab(models_dict, is_video=False):
         server_manager.stop()
         return "服务器已停止，显存已释放。"
 
-    if not is_video:
-        stop_server_btn.click(stop_server_action, outputs=[log_display])
+    stop_server_btn.click(stop_server_action, outputs=[log_display])
 
     generate_btn.click(
         generate_call,

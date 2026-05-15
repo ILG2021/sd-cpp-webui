@@ -131,47 +131,181 @@ class SDServerManager:
         raise TimeoutError("SD server timed out while starting.")
 
     def generate(self, prompt, negative_prompt, steps, cfg_scale, width, height, sampling_method, seed,
-                 reference_image=None, control_net_path=None, **kwargs):
-        """Send a generation request to the server"""
-        url = f"http://{self.host}:{self.port}/v1/images/generations"
-
-        # Construct payload with both standard OpenAI and sd-server specific fields
+                 reference_image=None, control_net_path=None, 
+                 cache_mode="none", cache_option="", scm_mask="", scm_policy="none",
+                 lora_list=None, **kwargs):
+        """Send a generation request to the native sdcpp API and poll for results"""
+        
+        # 1. Prepare native payload
+        # Mapping UI names to API names
+        # Note: server expects "euler_a" etc. UI might send "euler"
+        method = sampling_method.lower().replace("-", "_")
+        
         payload = {
             "prompt": prompt,
             "negative_prompt": negative_prompt,
-            "n": 1,
-            "width": width,  # Some versions prefer explicit W/H
+            "width": width,
             "height": height,
-            "size": f"{width}x{height}",
-            "steps": steps,
-            "cfg_scale": cfg_scale,
-            "sampler": sampling_method,
-            "sampling_method": sampling_method,
             "seed": seed,
-            "response_format": "b64_json"
+            "batch_count": 1,
+            "strength": kwargs.get("strength", 0.75),
+            "clip_skip": kwargs.get("clip_skip", -1),
+            "sample_params": {
+                "sample_method": method,
+                "sample_steps": steps,
+                "guidance": {
+                    "txt_cfg": cfg_scale
+                }
+            },
+            "cache_mode": cache_mode if cache_mode != "none" else "disabled",
+            "cache_option": cache_option,
+            "scm_mask": scm_mask,
+            "scm_policy_dynamic": scm_policy == "dynamic",
+            "output_format": "png",
+            "output_compression": 100
         }
 
-        # Handle reference images (img2img/edit) via base64 if server supports it
-        # Note: standard sd-server might need files via multipart or specific base64 fields
+        # Handle LoRAs
+        if lora_list:
+            payload["lora"] = lora_list # Expected format: [{"path": "...", "multiplier": 1.0}]
+        else:
+            payload["lora"] = []
+
+        # Handle images
         if reference_image and os.path.exists(reference_image):
             import base64
             with open(reference_image, "rb") as f:
                 img_b64 = base64.b64encode(f.read()).decode('utf-8')
-                payload["image"] = img_b64  # Common field for img2img in these servers
-        print("url", url)
-        print("paylaod",payload)
-        response = requests.post(url, json=payload, timeout=300)
-        if response.status_code == 200:
-            data = response.json()
-            # Handle b64 data or save to file
-            import base64
-            img_data = base64.b64decode(data['data'][0]['b64_json'])
-            output_file = "output.png"
-            with open(output_file, "wb") as f:
-                f.write(img_data)
-            return output_file
-        else:
-            raise RuntimeError(f"Server error: {response.text}")
+                # Determine if it's a control image or init image
+                if control_net_path:
+                    payload["control_image"] = img_b64
+                else:
+                    payload["init_image"] = img_b64
+
+        # 2. Submit job (Async)
+        url_submit = f"http://{self.host}:{self.port}/sdcpp/v1/img_gen"
+        print(f"Submitting job to {url_submit}...")
+        
+        response = requests.post(url_submit, json=payload, timeout=30)
+        if response.status_code != 202:
+            raise RuntimeError(f"Failed to submit job: {response.text}")
+        
+        job_data = response.json()
+        job_id = job_data["id"]
+        poll_url = f"http://{self.host}:{self.port}{job_data['poll_url']}"
+        
+        print(f"Job submitted: {job_id}. Polling...")
+
+        # 3. Poll for results
+        start_time = time.time()
+        timeout = 600 # 10 minutes
+        
+        while time.time() - start_time < timeout:
+            job_resp = requests.get(poll_url, timeout=10)
+            if job_resp.status_code != 200:
+                raise RuntimeError(f"Error polling job: {job_resp.text}")
+            
+            status_data = job_resp.json()
+            status = status_data["status"]
+            
+            if status == "completed":
+                print("Job completed!")
+                result = status_data.get("result")
+                if not result or "images" not in result:
+                    # In some versions it might be under data
+                    images = status_data.get("data", [])
+                else:
+                    images = result["images"]
+                
+                if not images:
+                    raise RuntimeError("Job completed but no images returned.")
+                
+                # Save first image
+                import base64
+                img_b64 = images[0]
+                if img_b64.startswith("data:"):
+                    img_b64 = img_b64.split(",")[1]
+                    
+                img_data = base64.b64decode(img_b64)
+                output_file = "output_server.png"
+                with open(output_file, "wb") as f:
+                    f.write(img_data)
+                return output_file
+            
+            elif status == "failed":
+                error_msg = status_data.get("error", "Unknown error")
+                raise RuntimeError(f"Job failed: {error_msg}")
+            
+            elif status == "cancelled":
+                raise RuntimeError("Job was cancelled.")
+            
+            # Progress update (optional: could yield here if integrated with generator)
+            print(f"Job status: {status}...")
+            time.sleep(1)
+            
+        raise TimeoutError("Job timed out.")
+
+    def generate_video(self, prompt, negative_prompt, video_frames, width, height, fps=6, **kwargs):
+        """Async video generation via /sdcpp/v1/vid_gen"""
+        url_submit = f"http://{self.host}:{self.port}/sdcpp/v1/vid_gen"
+        
+        payload = {
+            "prompt": prompt,
+            "negative_prompt": negative_prompt,
+            "video_frames": video_frames,
+            "width": width,
+            "height": height,
+            "fps": fps,
+            "sample_params": {
+                "sample_steps": kwargs.get("steps", 20),
+                "guidance": {"txt_cfg": kwargs.get("cfg_scale", 7.0)}
+            },
+            "output_format": "webp" # Or mp4 if supported
+        }
+        
+        response = requests.post(url_submit, json=payload, timeout=30)
+        if response.status_code != 202:
+            raise RuntimeError(f"Failed to submit video job: {response.text}")
+            
+        # Polling logic similar to img_gen (omitted for brevity or can be refactored into a shared helper)
+        # For now, let's just use the same polling logic
+        job_data = response.json()
+        # ... poll ...
+        # (Implementation would be similar to img_gen)
+        return self._poll_job(job_data["id"], job_data["poll_url"], output_ext="webp")
+
+    def _poll_job(self, job_id, relative_poll_url, output_ext="png"):
+        poll_url = f"http://{self.host}:{self.port}{relative_poll_url}"
+        start_time = time.time()
+        timeout = 1200 # 20 minutes for video
+        
+        while time.time() - start_time < timeout:
+            job_resp = requests.get(poll_url, timeout=10)
+            status_data = job_resp.json()
+            status = status_data["status"]
+            
+            if status == "completed":
+                result = status_data.get("result", {})
+                # Video result might be in 'videos' or 'data'
+                data_list = result.get("videos") or result.get("images") or status_data.get("data", [])
+                
+                if not data_list:
+                    raise RuntimeError("No output data found.")
+                
+                import base64
+                data_b64 = data_list[0]
+                if data_b64.startswith("data:"):
+                    data_b64 = data_b64.split(",")[1]
+                
+                output_file = f"output_server.{output_ext}"
+                with open(output_file, "wb") as f:
+                    f.write(base64.b64decode(data_b64))
+                return output_file
+            elif status in ["failed", "cancelled"]:
+                raise RuntimeError(f"Job {status}: {status_data.get('error')}")
+            
+            time.sleep(1)
+        raise TimeoutError("Job timed out.")
 
 
 # Global instance
