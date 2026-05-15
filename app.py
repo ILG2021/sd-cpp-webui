@@ -13,10 +13,10 @@ with open("config/models.json", "r") as f:
 IMAGE_MODELS = {k: v for k, v in MODELS_CONFIG.items() if v["type"] != "vid_gen"}
 VIDEO_MODELS = {k: v for k, v in MODELS_CONFIG.items() if v["type"] == "vid_gen"}
 
-def generate_call(model_name, prompt, negative_prompt, steps, cfg_scale, width, height, sampling_method, seed, 
-                  diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir, 
+def generate_call(model_name, prompt, negative_prompt, width, height, sampling_method, seed,
+                  diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir,
                   taesd_path, tae_path, cache_mode, cache_option, scm_mask, scm_policy,
-                  video_frames, flow_shift, reference_image, control_net_path, upscale_model, 
+                  video_frames, flow_shift, reference_image, control_net_path, upscale_model,
                   pm_images_dir, pm_style_strength, use_server_mode):
     
     if model_name not in MODELS_CONFIG:
@@ -37,8 +37,8 @@ def generate_call(model_name, prompt, negative_prompt, steps, cfg_scale, width, 
     params = {
         "p": prompt,
         "n": negative_prompt,
-        "steps": steps,
-        "cfg-scale": cfg_scale,
+        "steps": defaults.get("steps"),
+        "cfg-scale": defaults.get("cfg-scale"),
         "W": width,
         "H": height,
         "sampling-method": sampling_method,
@@ -68,7 +68,7 @@ def generate_call(model_name, prompt, negative_prompt, steps, cfg_scale, width, 
             server_manager.start(model_name, model_paths, params)
             yield None, "服务器已就绪，正在发送生成请求..."
             output_file = server_manager.generate(
-                prompt, negative_prompt, steps, cfg_scale, width, height, sampling_method, params["seed"],
+                prompt, negative_prompt, params["steps"], params["cfg-scale"], width, height, sampling_method, params["seed"],
                 reference_image=reference_image, control_net_path=control_net_path
             )
             yield output_file, "生成成功 (服务器模式)。"
@@ -128,9 +128,6 @@ def create_gen_tab(models_dict, is_video=False):
             with gr.Tabs():
                 with gr.Tab("基础设置"):
                     with gr.Row():
-                        steps = gr.Slider(minimum=1, maximum=100, step=1, value=20, label="步数 (Steps)")
-                        cfg_scale = gr.Slider(minimum=0.1, maximum=20.0, step=0.1, value=1.0, label="提示词相关性 (CFG Scale)")
-                    with gr.Row():
                         width = gr.Slider(minimum=256, maximum=2048, step=64, value=1024, label="宽度")
                         height = gr.Slider(minimum=256, maximum=2048, step=64, value=1024, label="高度")
                     sampling_method = gr.Dropdown(choices=["euler", "euler_a", "heun", "dpm2", "dpm++2s_a", "dpm++2m", "dpm++2m_v2", "lcm"], value="euler", label="采样方法")
@@ -185,8 +182,6 @@ def create_gen_tab(models_dict, is_video=False):
         config = models_dict[m_name]
         defaults = config.get("default_params", {})
         return {
-            steps: gr.update(value=defaults.get("steps", 20)),
-            cfg_scale: gr.update(value=defaults.get("cfg-scale", 1.0)),
             width: gr.update(value=defaults.get("W", 1024)),
             height: gr.update(value=defaults.get("H", 1024)),
             diffusion_fa: gr.update(value=defaults.get("diffusion-fa", True)),
@@ -194,7 +189,7 @@ def create_gen_tab(models_dict, is_video=False):
             clip_on_cpu: gr.update(value=defaults.get("clip-on-cpu", False)),
         }
 
-    model_name.change(update_model_defaults, inputs=[model_name], outputs=[steps, cfg_scale, width, height, diffusion_fa, offload_to_cpu, clip_on_cpu])
+    model_name.change(update_model_defaults, inputs=[model_name], outputs=[width, height, diffusion_fa, offload_to_cpu, clip_on_cpu])
 
     def stop_server_action():
         server_manager.stop()
@@ -206,8 +201,8 @@ def create_gen_tab(models_dict, is_video=False):
     generate_btn.click(
         generate_call,
         inputs=[
-            model_name, prompt, negative_prompt, steps, cfg_scale, width, height, sampling_method, seed, 
-            diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir, 
+            model_name, prompt, negative_prompt, width, height, sampling_method, seed,
+            diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir,
             taesd_path, tae_path, cache_mode, cache_option, scm_mask, scm_policy,
             video_frames, flow_shift, reference_image, control_net_path, upscale_model, pm_images_dir, pm_style_strength,
             use_server_mode
