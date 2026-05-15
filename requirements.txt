@@ -2,5 +2,6 @@ gradio
 huggingface_hub
 requests
 pillow
+python-dotenv
 # CUDA 支持的 Python 绑定 (编译时开启 CUDA)
 stable-diffusion-cpp-python --config-settings cmake.args="-DSD_CUDA=ON"

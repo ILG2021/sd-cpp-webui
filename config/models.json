@@ -4,9 +4,9 @@
             "type": "txt2img",
             "files": {
                 "diffusion-model": {
-                    "repo": "drbaph/Z-Image-Turbo-FP8",
-                    "filename": "z_image_turbo_fp8_e4m3fn.safetensors",
-                    "local_path": "models/Z-Image-Turbo/z_image_turbo_fp8_e4m3fn.safetensors"
+                    "repo": "leejet/Z-Image-Turbo-GGUF",
+                    "filename": "z_image_turbo-Q8_0.gguf",
+                    "local_path": "models/Z-Image-Turbo/z_image_turbo-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "Tongyi-MAI/Z-Image-Turbo",
@@ -50,6 +50,8 @@
             },
             "default_params": {
                 "cfg-scale": 5.0,
+                "sampling-method": "euler",
+                "steps": 25,
                 "W": 1024,
                 "H": 1024,
                 "diffusion-fa": true,

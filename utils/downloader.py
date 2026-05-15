@@ -1,5 +1,10 @@
 import os
 from huggingface_hub import hf_hub_download
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 def download_model(model_config):
     """
@@ -30,7 +35,8 @@ def download_model(model_config):
             filename=filename,
             subfolder=subfolder,
             local_dir=os.path.dirname(local_path),
-            local_dir_use_symlinks=False
+            local_dir_use_symlinks=False,
+            token=HF_TOKEN
         )
         
         # Rename if necessary to match local_path

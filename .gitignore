@@ -1,0 +1,20 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+
+# Project specific
+models/
+outputs/
+*.gguf
+*.safetensors
+*.bin
+*.pth
+*.ckpt
+*.onnx
+*.engine

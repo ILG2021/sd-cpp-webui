@@ -81,8 +81,8 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
 
     # --- 使用 Python 绑定 (持久化加载) ---
     if not python_manager.is_available():
-            yield None, "错误：stable-diffusion-cpp-python 未安装。请运行 pip install stable-diffusion-cpp-python"
-            return
+        yield None, "错误：stable-diffusion-cpp-python 未安装。请运行 pip install stable-diffusion-cpp-python"
+        return
 
     yield None, f"正在加载模型 {model_name} 到内存 (首次加载可能较慢)..."
     try:
@@ -128,7 +128,7 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
         import traceback
         traceback.print_exc()
         yield None, f"发生错误: {str(e)}"    
-        
+
 
 def create_gen_tab(models_dict, is_video=False):
     with gr.Row():
@@ -188,7 +188,10 @@ def create_gen_tab(models_dict, is_video=False):
                 unload_model_btn = gr.Button("⏹️ 卸载模型 (释放显存)", variant="secondary", scale=1)
 
         with gr.Column(scale=1):
-            output_display = gr.File(label="生成结果")
+            if is_video:
+                output_display = gr.Video(label="生成视频")
+            else:
+                output_display = gr.Image(label="生成图片", type="filepath")
             log_display = gr.Textbox(label="运行日志", lines=20, interactive=False)
 
     def update_model_defaults(m_name):
