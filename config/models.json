@@ -4,10 +4,9 @@
             "type": "txt2img",
             "files": {
                 "diffusion-model": {
-                    "repo": "Comfy-Org/z_image_turbo",
-                    "subfolder": "split_files/diffusion_models",
-                    "filename": "z_image_turbo_bf16.safetensors",
-                    "local_path": "models/Z-Image-Turbo/z_image_turbo_bf16.safetensors"
+                    "repo": "leejet/Z-Image-Turbo-GGUF",
+                    "filename": "z_image_turbo-Q8_0.gguf",
+                    "local_path": "models/Z-Image-Turbo/z_image_turbo-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.1-schnell",
