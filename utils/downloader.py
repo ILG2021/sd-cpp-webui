@@ -46,3 +46,20 @@ def download_model(model_config):
         downloaded_paths[key] = local_path
         
     return downloaded_paths
+
+def win_install_drivers():
+    path1 = r'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\bin\cublasLt64_12.dll'
+    path2 = r'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\bin\cudnn_cnn64_9.dll'
+
+    if not os.path.exists(path1) or not os.path.exists(path2):
+        print("没有安装cudnn驱动，开始下载驱动")
+        if not os.path.exists("cudnn.exe"):
+            import gdown
+            gdown.download("https://drive.google.com/file/d/1C0qJHToa72lLS2JUFO_89bYkKdW7ENB3/view?usp=drive_link",
+                            "cudnn.exe",
+                            fuzzy=True,
+                            quiet=False)
+        os.startfile("cudnn.exe")
+    else:
+        if os.path.exists("cudnn.exe"):
+            os.remove("cudnn.exe")

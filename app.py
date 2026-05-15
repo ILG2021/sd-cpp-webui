@@ -1,3 +1,5 @@
+from utils.downloader import win_install_drivers
+from platform import platform
 import gradio as gr
 import json
 import os
@@ -241,4 +243,6 @@ with gr.Blocks(title="SD.cpp 桌面版 WebUI") as demo:
             create_gen_tab(VIDEO_MODELS, is_video=True)
 
 if __name__ == "__main__":
+    if platform.system() == "Windows":
+        win_install_drivers()
     demo.queue().launch()
