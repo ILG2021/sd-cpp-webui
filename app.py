@@ -84,53 +84,51 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
             yield None, "错误：stable-diffusion-cpp-python 未安装。请运行 pip install stable-diffusion-cpp-python"
             return
 
-        yield None, f"正在加载模型 {model_name} 到内存 (首次加载可能较慢)..."
-        try:
-            # 合并模型路径到 config 用于加载
-            load_config = config.copy()
-            if "files" not in load_config: load_config["files"] = {}
-            for k, v in model_paths.items():
-                if k not in load_config["files"]:
-                    load_config["files"][k] = {"local_path": v}
-                else:
-                    load_config["files"][k]["local_path"] = v
+    yield None, f"正在加载模型 {model_name} 到内存 (首次加载可能较慢)..."
+    try:
+        # 合并模型路径到 config 用于加载
+        load_config = config.copy()
+        if "files" not in load_config: load_config["files"] = {}
+        for k, v in model_paths.items():
+            if k not in load_config["files"]:
+                load_config["files"][k] = {"local_path": v}
+            else:
+                load_config["files"][k]["local_path"] = v
 
-            python_manager.load_model(model_name, load_config, lora_model_dir)
-            yield None, "模型已就绪，开始生成..."
-            
-            # 解析 LoRA (Python 绑定通过 prompt 支持 LoRA)
-            # 但我们也支持传递 init_image 等
-            
-            if config["type"] == "vid_gen":
-                gen_proc = python_manager.generate_video(
-                    prompt, negative_prompt, video_frames, width, height,
-                    steps=params["steps"], cfg_scale=params["cfg-scale"]
-                )
+        python_manager.load_model(model_name, load_config, lora_model_dir)
+        yield None, "模型已就绪，开始生成..."
+        
+        # 解析 LoRA (Python 绑定通过 prompt 支持 LoRA)
+        # 但我们也支持传递 init_image 等
+        
+        if config["type"] == "vid_gen":
+            gen_proc = python_manager.generate_video(
+                prompt, negative_prompt, video_frames, width, height,
+                steps=params["steps"], cfg_scale=params["cfg-scale"]
+            )
+        else:
+            gen_proc = python_manager.generate(
+                prompt, negative_prompt, params["steps"], params["cfg-scale"], width, height, params["sampling-method"], params["seed"],
+                init_image=reference_image, 
+                strength=0.7 # 默认强度
+            )
+        
+        output_file = None
+        for update in gen_proc:
+            if isinstance(update, str) and (update.endswith(".png") or update.endswith(".webp") or update.endswith(".webm")):
+                output_file = update
             else:
-                gen_proc = python_manager.generate(
-                    prompt, negative_prompt, params["steps"], params["cfg-scale"], width, height, params["sampling-method"], params["seed"],
-                    init_image=reference_image, 
-                    strength=0.7 # 默认强度
-                )
-            
-            output_file = None
-            for update in gen_proc:
-                if isinstance(update, str) and (update.endswith(".png") or update.endswith(".webp") or update.endswith(".webm")):
-                    output_file = update
-                else:
-                    yield None, update
-            
-            if output_file:
-                yield output_file, "生成成功 (Python 模式)。"
-            else:
-                yield None, "生成失败。"
-        return
+                yield None, update
+        
+        if output_file:
+            yield output_file, "生成成功 (Python 模式)。"
+        else:
+            yield None, "生成失败。"
     except Exception as e:
         import traceback
         traceback.print_exc()
-        yield None, f"发生错误: {str(e)}"
-        return
-    
+        yield None, f"发生错误: {str(e)}"    
+        
 
 def create_gen_tab(models_dict, is_video=False):
     with gr.Row():
