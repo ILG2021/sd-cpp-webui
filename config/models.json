@@ -7,17 +7,17 @@
                     "repo": "Comfy-Org/z_image_turbo",
                     "subfolder": "split_files/diffusion_models",
                     "filename": "z_image_turbo_bf16.safetensors",
-                    "local_path": "models/z_image_turbo_bf16.safetensors"
+                    "local_path": "models/Z-Image-Turbo/z_image_turbo_bf16.safetensors"
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.1-schnell",
                     "filename": "ae.safetensors",
-                    "local_path": "models/ae.safetensors"
+                    "local_path": "models/Z-Image-Turbo/ae.safetensors"
                 },
                 "llm": {
                     "repo": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
                     "filename": "Qwen3-4B-Instruct-2507-Q8_0.gguf",
-                    "local_path": "models/Qwen3-4B-Instruct-2507-Q8_0.gguf"
+                    "local_path": "models/Z-Image-Turbo/Qwen3-4B-Instruct-2507-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -37,17 +37,17 @@
                     "repo": "Comfy-Org/z_image",
                     "subfolder": "split_files/diffusion_models",
                     "filename": "z_image_bf16.safetensors",
-                    "local_path": "models/z_image_bf16.safetensors"
+                    "local_path": "models/Z-Image/z_image_bf16.safetensors"
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.1-schnell",
                     "filename": "ae.safetensors",
-                    "local_path": "models/ae.safetensors"
+                    "local_path": "models/Z-Image/ae.safetensors"
                 },
                 "llm": {
                     "repo": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
                     "filename": "Qwen3-4B-Instruct-2507-Q8_0.gguf",
-                    "local_path": "models/Qwen3-4B-Instruct-2507-Q8_0.gguf"
+                    "local_path": "models/Z-Image/Qwen3-4B-Instruct-2507-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -66,22 +66,22 @@
                 "diffusion-model": {
                     "repo": "black-forest-labs/FLUX.1-schnell",
                     "filename": "flux1-schnell.safetensors",
-                    "local_path": "models/flux1-schnell.safetensors"
+                    "local_path": "models/Flux_1-schnell/flux1-schnell.safetensors"
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.1-dev",
                     "filename": "ae.safetensors",
-                    "local_path": "models/ae.safetensors"
+                    "local_path": "models/Flux_1-schnell/ae.safetensors"
                 },
                 "clip_l": {
                     "repo": "comfyanonymous/flux_text_encoders",
                     "filename": "clip_l.safetensors",
-                    "local_path": "models/clip_l.safetensors"
+                    "local_path": "models/Flux_1-schnell/clip_l.safetensors"
                 },
                 "t5xxl": {
                     "repo": "comfyanonymous/flux_text_encoders",
                     "filename": "t5xxl_fp16.safetensors",
-                    "local_path": "models/t5xxl_fp16.safetensors"
+                    "local_path": "models/Flux_1-schnell/t5xxl_fp16.safetensors"
                 }
             },
             "default_params": {
@@ -99,22 +99,22 @@
                 "diffusion-model": {
                     "repo": "black-forest-labs/FLUX.1-dev",
                     "filename": "flux1-dev.safetensors",
-                    "local_path": "models/flux1-dev.safetensors"
+                    "local_path": "models/Flux_1-dev/flux1-dev.safetensors"
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.1-dev",
                     "filename": "ae.safetensors",
-                    "local_path": "models/ae.safetensors"
+                    "local_path": "models/Flux_1-dev/ae.safetensors"
                 },
                 "clip_l": {
                     "repo": "comfyanonymous/flux_text_encoders",
                     "filename": "clip_l.safetensors",
-                    "local_path": "models/clip_l.safetensors"
+                    "local_path": "models/Flux_1-dev/clip_l.safetensors"
                 },
                 "t5xxl": {
                     "repo": "comfyanonymous/flux_text_encoders",
                     "filename": "t5xxl_fp16.safetensors",
-                    "local_path": "models/t5xxl_fp16.safetensors"
+                    "local_path": "models/Flux_1-dev/t5xxl_fp16.safetensors"
                 }
             },
             "default_params": {
@@ -132,7 +132,7 @@
                 "diffusion-model": {
                     "repo": "stabilityai/stable-diffusion-xl-base-1.0",
                     "filename": "sd_xl_base_1.0.safetensors",
-                    "local_path": "models/sd_xl_base_1.0.safetensors"
+                    "local_path": "models/SDXL-Base-1_0/sd_xl_base_1.0.safetensors"
                 }
             },
             "default_params": {
@@ -149,7 +149,7 @@
                 "diffusion-model": {
                     "repo": "runwayml/stable-diffusion-v1-5",
                     "filename": "v1-5-pruned-emaonly.safetensors",
-                    "local_path": "models/v1-5-pruned-emaonly.safetensors"
+                    "local_path": "models/Stable-Diffusion-v1_5/v1-5-pruned-emaonly.safetensors"
                 }
             },
             "default_params": {
@@ -166,7 +166,7 @@
                 "diffusion-model": {
                     "repo": "CompVis/stable-diffusion-v-1-4-original",
                     "filename": "sd-v1-4.ckpt",
-                    "local_path": "models/sd-v1-4.ckpt"
+                    "local_path": "models/Stable-Diffusion-v1_4/sd-v1-4.ckpt"
                 }
             },
             "default_params": {
@@ -183,7 +183,7 @@
                 "diffusion-model": {
                     "repo": "stabilityai/stable-diffusion-2-1",
                     "filename": "v2-1_768-ema-pruned.safetensors",
-                    "local_path": "models/v2-1_768-ema-pruned.safetensors"
+                    "local_path": "models/Stable-Diffusion-v2_1/v2-1_768-ema-pruned.safetensors"
                 }
             },
             "default_params": {
@@ -200,22 +200,22 @@
                 "diffusion-model": {
                     "repo": "stabilityai/stable-diffusion-3.5-large",
                     "filename": "sd3.5_large.safetensors",
-                    "local_path": "models/sd3.5_large.safetensors"
+                    "local_path": "models/SD-3_5-Large/sd3.5_large.safetensors"
                 },
                 "clip_l": {
                     "repo": "comfyanonymous/flux_text_encoders",
                     "filename": "clip_l.safetensors",
-                    "local_path": "models/clip_l.safetensors"
+                    "local_path": "models/SD-3_5-Large/clip_l.safetensors"
                 },
                 "clip_g": {
                     "repo": "comfyanonymous/flux_text_encoders",
                     "filename": "clip_g.safetensors",
-                    "local_path": "models/clip_g.safetensors"
+                    "local_path": "models/SD-3_5-Large/clip_g.safetensors"
                 },
                 "t5xxl": {
                     "repo": "comfyanonymous/flux_text_encoders",
                     "filename": "t5xxl_fp16.safetensors",
-                    "local_path": "models/t5xxl_fp16.safetensors"
+                    "local_path": "models/SD-3_5-Large/t5xxl_fp16.safetensors"
                 }
             },
             "default_params": {
@@ -232,7 +232,7 @@
                 "diffusion-model": {
                     "repo": "stabilityai/stable-diffusion-3-medium",
                     "filename": "sd3_medium.safetensors",
-                    "local_path": "models/sd3_medium.safetensors"
+                    "local_path": "models/SD-3-Medium/sd3_medium.safetensors"
                 }
             },
             "default_params": {
@@ -249,17 +249,17 @@
                 "diffusion-model": {
                     "repo": "silveroxides/Chroma-GGUF",
                     "filename": "chroma-unlocked-v40-q8_0.gguf",
-                    "local_path": "models/chroma-unlocked-v40-q8_0.gguf"
+                    "local_path": "models/Chroma-v40/chroma-unlocked-v40-q8_0.gguf"
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.1-dev",
                     "filename": "ae.safetensors",
-                    "local_path": "models/ae.safetensors"
+                    "local_path": "models/Chroma-v40/ae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "comfyanonymous/flux_text_encoders",
                     "filename": "t5xxl_fp16.safetensors",
-                    "local_path": "models/t5xxl_fp16.safetensors"
+                    "local_path": "models/Chroma-v40/t5xxl_fp16.safetensors"
                 }
             },
             "default_params": {
@@ -278,17 +278,17 @@
                 "diffusion-model": {
                     "repo": "city96/FLUX.2-dev-gguf",
                     "filename": "flux2-dev-Q8_0.gguf",
-                    "local_path": "models/flux2-dev-Q8_0.gguf"
+                    "local_path": "models/Flux_2-dev/flux2-dev-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.2-dev",
                     "filename": "flux2_ae.safetensors",
-                    "local_path": "models/flux2_ae.safetensors"
+                    "local_path": "models/Flux_2-dev/flux2_ae.safetensors"
                 },
                 "llm": {
                     "repo": "unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF",
                     "filename": "Mistral-Small-3.2-24B-Instruct-2506-Q8_0.gguf",
-                    "local_path": "models/Mistral-Small-3.2-24B-Instruct-2506-Q8_0.gguf"
+                    "local_path": "models/Flux_2-dev/Mistral-Small-3.2-24B-Instruct-2506-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -307,17 +307,17 @@
                 "diffusion-model": {
                     "repo": "leejet/FLUX.2-klein-4B-GGUF",
                     "filename": "flux-2-klein-4b-Q8_0.gguf",
-                    "local_path": "models/flux-2-klein-4b-Q8_0.gguf"
+                    "local_path": "models/Flux_2-klein-4B/flux-2-klein-4b-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.2-dev",
                     "filename": "flux2_ae.safetensors",
-                    "local_path": "models/flux2_ae.safetensors"
+                    "local_path": "models/Flux_2-klein-4B/flux2_ae.safetensors"
                 },
                 "llm": {
                     "repo": "unsloth/Qwen3-4B-GGUF",
                     "filename": "Qwen3-4B-Q8_0.gguf",
-                    "local_path": "models/Qwen3-4B-Q8_0.gguf"
+                    "local_path": "models/Flux_2-klein-4B/Qwen3-4B-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -337,19 +337,19 @@
                     "repo": "Comfy-Org/Qwen-Image_ComfyUI",
                     "subfolder": "checkpoints",
                     "filename": "qwen_image_bf16.safetensors",
-                    "local_path": "models/qwen_image_bf16.safetensors"
+                    "local_path": "models/Qwen-Image/qwen_image_bf16.safetensors"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Qwen-Image_ComfyUI",
                     "subfolder": "split_files/vae",
                     "filename": "qwen_image_vae.safetensors",
-                    "local_path": "models/qwen_image_vae.safetensors"
+                    "local_path": "models/Qwen-Image/qwen_image_vae.safetensors"
                 },
                 "llm": {
                     "repo": "Comfy-Org/Qwen-Image_ComfyUI",
                     "subfolder": "split_files/text_encoders",
                     "filename": "qwen_3_06b_instruct.safetensors",
-                    "local_path": "models/qwen_3_06b_instruct.safetensors"
+                    "local_path": "models/Qwen-Image/qwen_3_06b_instruct.safetensors"
                 }
             },
             "default_params": {
@@ -368,23 +368,23 @@
                 "diffusion-model": {
                     "repo": "QuantStack/Qwen-Image-Edit-2509-GGUF",
                     "filename": "Qwen-Image-Edit-2509-Q8_0.gguf",
-                    "local_path": "models/Qwen-Image-Edit-2509-Q8_0.gguf"
+                    "local_path": "models/Qwen-Image-Edit-2509/Qwen-Image-Edit-2509-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Qwen-Image_ComfyUI",
                     "subfolder": "split_files/vae",
                     "filename": "qwen_image_vae.safetensors",
-                    "local_path": "models/qwen_image_vae.safetensors"
+                    "local_path": "models/Qwen-Image-Edit-2509/qwen_image_vae.safetensors"
                 },
                 "llm": {
                     "repo": "mradermacher/Qwen2.5-VL-7B-Instruct-GGUF",
                     "filename": "Qwen2.5-VL-7B-Instruct.Q8_0.gguf",
-                    "local_path": "models/Qwen2.5-VL-7B-Instruct-Q8_0.gguf"
+                    "local_path": "models/Qwen-Image-Edit-2509/Qwen2.5-VL-7B-Instruct.Q8_0.gguf"
                 },
                 "llm_vision": {
                     "repo": "QuantStack/Qwen2.5-VL-7B-Instruct-mmproj-GGUF",
                     "filename": "Qwen2.5-VL-7B-Instruct.mmproj-Q8_0.gguf",
-                    "local_path": "models/Qwen2.5-VL-7B-Instruct.mmproj-Q8_0.gguf"
+                    "local_path": "models/Qwen-Image-Edit-2509/Qwen2.5-VL-7B-Instruct.mmproj-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -405,7 +405,7 @@
                     "repo": "Comfy-Org/Ovis-Image-7B_ComfyUI",
                     "subfolder": "checkpoints",
                     "filename": "ovis_image_7b_bf16.safetensors",
-                    "local_path": "models/ovis_image_7b_bf16.safetensors"
+                    "local_path": "models/Ovis-Image-7B/ovis_image_7b_bf16.safetensors"
                 }
             },
             "default_params": {
@@ -425,7 +425,7 @@
                     "repo": "Comfy-Org/HiDream-O1-Image",
                     "subfolder": "checkpoints",
                     "filename": "hidream_o1_image_dev_bf16.safetensors",
-                    "local_path": "models/hidream_o1_image_dev_bf16.safetensors"
+                    "local_path": "models/HiDream-O1-Image/hidream_o1_image_dev_bf16.safetensors"
                 }
             },
             "default_params": {
@@ -443,19 +443,19 @@
                     "repo": "Comfy-Org/ERNIE-Image",
                     "subfolder": "diffusion_models",
                     "filename": "ernie-image-turbo.safetensors",
-                    "local_path": "models/ernie-image-turbo.safetensors"
+                    "local_path": "models/ERNIE-Image-Turbo/ernie-image-turbo.safetensors"
                 },
                 "vae": {
                     "repo": "Comfy-Org/ERNIE-Image",
                     "subfolder": "vae",
                     "filename": "flux2_ae.safetensors",
-                    "local_path": "models/flux2_ae.safetensors"
+                    "local_path": "models/ERNIE-Image-Turbo/flux2_ae.safetensors"
                 },
                 "llm": {
                     "repo": "Comfy-Org/ERNIE-Image",
                     "subfolder": "text_encoders",
                     "filename": "ministral-3-3b.safetensors",
-                    "local_path": "models/ministral-3-3b.safetensors"
+                    "local_path": "models/ERNIE-Image-Turbo/ministral-3-3b.safetensors"
                 }
             },
             "default_params": {
@@ -475,19 +475,19 @@
                     "repo": "circlestone-labs/Anima",
                     "subfolder": "split_files/diffusion_models",
                     "filename": "anima-preview.safetensors",
-                    "local_path": "models/anima-preview.safetensors"
+                    "local_path": "models/Anima-Soul/anima-preview.safetensors"
                 },
                 "vae": {
                     "repo": "circlestone-labs/Anima",
                     "subfolder": "split_files/vae",
                     "filename": "qwen_image_vae.safetensors",
-                    "local_path": "models/qwen_image_vae.safetensors"
+                    "local_path": "models/Anima-Soul/qwen_image_vae.safetensors"
                 },
                 "llm": {
                     "repo": "circlestone-labs/Anima",
                     "subfolder": "split_files/text_encoders",
                     "filename": "qwen_3_06b_base.safetensors",
-                    "local_path": "models/qwen_3_06b_base.safetensors"
+                    "local_path": "models/Anima-Soul/qwen_3_06b_base.safetensors"
                 }
             },
             "default_params": {
@@ -506,7 +506,7 @@
                 "diffusion-model": {
                     "repo": "stabilityai/sdxl-turbo",
                     "filename": "sdxl_turbo.safetensors",
-                    "local_path": "models/sdxl_turbo.safetensors"
+                    "local_path": "models/SDXL-Turbo/sdxl_turbo.safetensors"
                 }
             },
             "default_params": {
@@ -522,7 +522,7 @@
                 "diffusion-model": {
                     "repo": "stabilityai/sd-turbo",
                     "filename": "sd_turbo.safetensors",
-                    "local_path": "models/sd_turbo.safetensors"
+                    "local_path": "models/SD-Turbo/sd_turbo.safetensors"
                 }
             },
             "default_params": {
@@ -538,7 +538,7 @@
                 "diffusion-model": {
                     "repo": "segmind/SSD-1B",
                     "filename": "SSD-1B-A1111.safetensors",
-                    "local_path": "models/SSD-1B-A1111.safetensors"
+                    "local_path": "models/SSD-1B-Distilled/SSD-1B-A1111.safetensors"
                 }
             },
             "default_params": {
@@ -555,7 +555,7 @@
                 "diffusion-model": {
                     "repo": "segmind/Segmind-Vega",
                     "filename": "segmind-vega.safetensors",
-                    "local_path": "models/segmind-vega.safetensors"
+                    "local_path": "models/Segmind-Vega/segmind-vega.safetensors"
                 }
             },
             "default_params": {
@@ -572,7 +572,7 @@
                 "diffusion-model": {
                     "repo": "akleine/sdxs-512",
                     "filename": "sdxs-512.safetensors",
-                    "local_path": "models/sdxs-512.safetensors"
+                    "local_path": "models/SDXS-512-Tiny/sdxs-512.safetensors"
                 }
             },
             "default_params": {
@@ -590,18 +590,18 @@
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/diffusion_models",
                     "filename": "wan2.1_t2v_1.3B_fp16.safetensors",
-                    "local_path": "models/wan2.1_t2v_1.3B_fp16.safetensors"
+                    "local_path": "models/Wan2_1-T2V-1_3B/wan2.1_t2v_1.3B_fp16.safetensors"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/vae",
                     "filename": "wan_2.1_vae.safetensors",
-                    "local_path": "models/wan_2.1_vae.safetensors"
+                    "local_path": "models/Wan2_1-T2V-1_3B/wan_2.1_vae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "city96/umt5-xxl-encoder-gguf",
                     "filename": "umt5-xxl-encoder-Q8_0.gguf",
-                    "local_path": "models/umt5-xxl-encoder-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-T2V-1_3B/umt5-xxl-encoder-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -620,23 +620,23 @@
                 "diffusion-model": {
                     "repo": "QuantStack/Wan2.2-T2V-A14B-GGUF",
                     "filename": "Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf",
-                    "local_path": "models/Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf"
+                    "local_path": "models/Wan2_2-T2V-A14B-GGUF/Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf"
                 },
                 "high-noise-diffusion-model": {
                     "repo": "QuantStack/Wan2.2-T2V-A14B-GGUF",
                     "filename": "Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf",
-                    "local_path": "models/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf"
+                    "local_path": "models/Wan2_2-T2V-A14B-GGUF/Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/vae",
                     "filename": "wan_2.1_vae.safetensors",
-                    "local_path": "models/wan_2.1_vae.safetensors"
+                    "local_path": "models/Wan2_2-T2V-A14B-GGUF/wan_2.1_vae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "city96/umt5-xxl-encoder-gguf",
                     "filename": "umt5-xxl-encoder-Q8_0.gguf",
-                    "local_path": "models/umt5-xxl-encoder-Q8_0.gguf"
+                    "local_path": "models/Wan2_2-T2V-A14B-GGUF/umt5-xxl-encoder-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -661,18 +661,18 @@
                     "repo": "Comfy-Org/Wan_2.2_ComfyUI_Repackaged",
                     "subfolder": "split_files/diffusion_models",
                     "filename": "wan2.2_ti2v_5B_fp16.safetensors",
-                    "local_path": "models/wan2.2_ti2v_5B_fp16.safetensors"
+                    "local_path": "models/Wan2_2-TI2V-5B/wan2.2_ti2v_5B_fp16.safetensors"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Wan_2.2_ComfyUI_Repackaged",
                     "subfolder": "split_files/vae",
                     "filename": "wan2.2_vae.safetensors",
-                    "local_path": "models/wan2.2_vae.safetensors"
+                    "local_path": "models/Wan2_2-TI2V-5B/wan2.2_vae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "city96/umt5-xxl-encoder-gguf",
                     "filename": "umt5-xxl-encoder-Q8_0.gguf",
-                    "local_path": "models/umt5-xxl-encoder-Q8_0.gguf"
+                    "local_path": "models/Wan2_2-TI2V-5B/umt5-xxl-encoder-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -693,23 +693,23 @@
                 "diffusion-model": {
                     "repo": "QuantStack/Wan2.2-I2V-A14B-GGUF",
                     "filename": "Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf",
-                    "local_path": "models/Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf"
+                    "local_path": "models/Wan2_2-I2V-A14B-GGUF/Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf"
                 },
                 "high-noise-diffusion-model": {
                     "repo": "QuantStack/Wan2.2-I2V-A14B-GGUF",
                     "filename": "Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf",
-                    "local_path": "models/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf"
+                    "local_path": "models/Wan2_2-I2V-A14B-GGUF/Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/vae",
                     "filename": "wan_2.1_vae.safetensors",
-                    "local_path": "models/wan_2.1_vae.safetensors"
+                    "local_path": "models/Wan2_2-I2V-A14B-GGUF/wan_2.1_vae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "city96/umt5-xxl-encoder-gguf",
                     "filename": "umt5-xxl-encoder-Q8_0.gguf",
-                    "local_path": "models/umt5-xxl-encoder-Q8_0.gguf"
+                    "local_path": "models/Wan2_2-I2V-A14B-GGUF/umt5-xxl-encoder-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -733,18 +733,18 @@
                 "diffusion-model": {
                     "repo": "city96/Wan2.1-T2V-14B-gguf",
                     "filename": "wan2.1-t2v-14b-Q8_0.gguf",
-                    "local_path": "models/wan2.1-t2v-14b-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-T2V-14B-GGUF/wan2.1-t2v-14b-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/vae",
                     "filename": "wan_2.1_vae.safetensors",
-                    "local_path": "models/wan_2.1_vae.safetensors"
+                    "local_path": "models/Wan2_1-T2V-14B-GGUF/wan_2.1_vae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "city96/umt5-xxl-encoder-gguf",
                     "filename": "umt5-xxl-encoder-Q8_0.gguf",
-                    "local_path": "models/umt5-xxl-encoder-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-T2V-14B-GGUF/umt5-xxl-encoder-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -765,24 +765,24 @@
                 "diffusion-model": {
                     "repo": "city96/Wan2.1-I2V-14B-480P-gguf",
                     "filename": "wan2.1-i2v-14b-480p-Q8_0.gguf",
-                    "local_path": "models/wan2.1-i2v-14b-480p-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-I2V-14B-480P-GGUF/wan2.1-i2v-14b-480p-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/vae",
                     "filename": "wan_2.1_vae.safetensors",
-                    "local_path": "models/wan_2.1_vae.safetensors"
+                    "local_path": "models/Wan2_1-I2V-14B-480P-GGUF/wan_2.1_vae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "city96/umt5-xxl-encoder-gguf",
                     "filename": "umt5-xxl-encoder-Q8_0.gguf",
-                    "local_path": "models/umt5-xxl-encoder-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-I2V-14B-480P-GGUF/umt5-xxl-encoder-Q8_0.gguf"
                 },
                 "clip_vision": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/clip_vision",
                     "filename": "clip_vision_h.safetensors",
-                    "local_path": "models/clip_vision_h.safetensors"
+                    "local_path": "models/Wan2_1-I2V-14B-480P-GGUF/clip_vision_h.safetensors"
                 }
             },
             "default_params": {
@@ -803,18 +803,18 @@
                 "diffusion-model": {
                     "repo": "calcuis/wan-1.3b-gguf",
                     "filename": "wan2.1-vace-1.3b-q8_0.gguf",
-                    "local_path": "models/wan2.1-vace-1.3b-q8_0.gguf"
+                    "local_path": "models/Wan2_1-VACE-1_3B-GGUF/wan2.1-vace-1.3b-q8_0.gguf"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/vae",
                     "filename": "wan_2.1_vae.safetensors",
-                    "local_path": "models/wan_2.1_vae.safetensors"
+                    "local_path": "models/Wan2_1-VACE-1_3B-GGUF/wan_2.1_vae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "city96/umt5-xxl-encoder-gguf",
                     "filename": "umt5-xxl-encoder-Q8_0.gguf",
-                    "local_path": "models/umt5-xxl-encoder-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-VACE-1_3B-GGUF/umt5-xxl-encoder-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -834,18 +834,18 @@
                 "diffusion-model": {
                     "repo": "QuantStack/Wan2.1_14B_VACE-GGUF",
                     "filename": "Wan2.1_14B_VACE-Q8_0.gguf",
-                    "local_path": "models/Wan2.1_14B_VACE-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-VACE-14B-GGUF/Wan2.1_14B_VACE-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/vae",
                     "filename": "wan_2.1_vae.safetensors",
-                    "local_path": "models/wan_2.1_vae.safetensors"
+                    "local_path": "models/Wan2_1-VACE-14B-GGUF/wan_2.1_vae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "city96/umt5-xxl-encoder-gguf",
                     "filename": "umt5-xxl-encoder-Q8_0.gguf",
-                    "local_path": "models/umt5-xxl-encoder-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-VACE-14B-GGUF/umt5-xxl-encoder-Q8_0.gguf"
                 }
             },
             "default_params": {
@@ -865,24 +865,24 @@
                 "diffusion-model": {
                     "repo": "city96/Wan2.1-FLF2V-14B-720P-gguf",
                     "filename": "wan2.1-flf2v-14b-720p-Q8_0.gguf",
-                    "local_path": "models/wan2.1-flf2v-14b-720p-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-FLF2V-14B-720P-GGUF/wan2.1-flf2v-14b-720p-Q8_0.gguf"
                 },
                 "vae": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/vae",
                     "filename": "wan_2.1_vae.safetensors",
-                    "local_path": "models/wan_2.1_vae.safetensors"
+                    "local_path": "models/Wan2_1-FLF2V-14B-720P-GGUF/wan_2.1_vae.safetensors"
                 },
                 "t5xxl": {
                     "repo": "city96/umt5-xxl-encoder-gguf",
                     "filename": "umt5-xxl-encoder-Q8_0.gguf",
-                    "local_path": "models/umt5-xxl-encoder-Q8_0.gguf"
+                    "local_path": "models/Wan2_1-FLF2V-14B-720P-GGUF/umt5-xxl-encoder-Q8_0.gguf"
                 },
                 "clip_vision": {
                     "repo": "Comfy-Org/Wan_2.1_ComfyUI_repackaged",
                     "subfolder": "split_files/clip_vision",
                     "filename": "clip_vision_h.safetensors",
-                    "local_path": "models/clip_vision_h.safetensors"
+                    "local_path": "models/Wan2_1-FLF2V-14B-720P-GGUF/clip_vision_h.safetensors"
                 }
             },
             "default_params": {
