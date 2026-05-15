@@ -35,7 +35,7 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
                   diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir,
                   taesd_path, tae_path, cache_mode, cache_option, scm_mask, scm_policy,
                   video_frames, flow_shift, reference_image, control_net_path, upscale_model,
-                  pm_images_dir, pm_style_strength, use_python_mode):
+                  pm_images_dir, pm_style_strength):
     
     if model_name not in MODELS_CONFIG:
         return None, "错误：未找到所选模型的配置。"
@@ -79,9 +79,8 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
     if taesd_path: model_paths["taesd"] = taesd_path
     if tae_path: model_paths["tae"] = tae_path
 
-    # --- Python 绑定模式 (持久化加载) ---
-    if use_python_mode:
-        if not python_manager.is_available():
+    # --- 使用 Python 绑定 (持久化加载) ---
+    if not python_manager.is_available():
             yield None, "错误：stable-diffusion-cpp-python 未安装。请运行 pip install stable-diffusion-cpp-python"
             return
 
@@ -125,59 +124,19 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
                 yield output_file, "生成成功 (Python 模式)。"
             else:
                 yield None, "生成失败。"
-            return
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            yield None, f"Python 模式失败: {str(e)}"
-            return
+        return
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        yield None, f"发生错误: {str(e)}"
+        return
     
-    # --- 标准 CLI 模式 ---
-    if config["type"] == "vid_gen":
-        params["video-frames"] = video_frames
-        params["flow-shift"] = flow_shift
-        output_file = "output.webm"
-    else:
-        output_file = "output.png"
-    
-    if reference_image is not None:
-        params["r"] = reference_image
-        if "Stable-Diffusion" in model_name:
-            if control_net_path:
-                params["control-image"] = reference_image
-                model_paths["control-net"] = control_net_path
-            else:
-                params["i"] = reference_image
-                params["strength"] = 0.7
-
-    if upscale_model:
-        params["upscale-model"] = upscale_model
-
-    if pm_images_dir:
-        params["pm-id-images-dir"] = pm_images_dir
-        params["pm-style-strength"] = pm_style_strength
-
-    params["o"] = output_file
-
-    yield None, "正在通过 CLI 开始生成..."
-    print("正在通过 CLI 开始生成...")
-    log_output = ""
-    for log in run_sd_cli(config["type"], params, model_paths):
-        log_output = log
-        print("log", log)
-        yield None, log_output
-
-    if os.path.exists(output_file):
-        yield output_file, log_output
-    else:
-        yield None, log_output + "\n错误：未生成输出文件。"
 
 def create_gen_tab(models_dict, is_video=False):
     with gr.Row():
         with gr.Column(scale=1):
             with gr.Row():
                 model_name = gr.Dropdown(choices=list(models_dict.keys()), value=list(models_dict.keys())[0], label="选择模型", scale=3)
-                use_server_mode = gr.Checkbox(label="开启服务器模式 (保持模型在内存中)", value=True, scale=1)
             
             prompt = gr.Textbox(label="提示词 (Prompt)", placeholder="输入你想要生成的画面描述... (支持 <lora:name:weight> 语法)", lines=3)
             negative_prompt = gr.Textbox(label="反向提示词 (Negative Prompt)", placeholder="输入你不想要出现的元素...", lines=2)
@@ -264,8 +223,7 @@ def create_gen_tab(models_dict, is_video=False):
             model_name, prompt, negative_prompt, width, height, seed,
             diffusion_fa, offload_to_cpu, clip_on_cpu, vae_on_cpu, lora_model_dir,
             taesd_path, tae_path, cache_mode, cache_option, scm_mask, scm_policy,
-            video_frames, flow_shift, reference_image, control_net_path, upscale_model, pm_images_dir, pm_style_strength,
-            use_server_mode
+            video_frames, flow_shift, reference_image, control_net_path, upscale_model, pm_images_dir, pm_style_strength
         ],
         outputs=[output_display, log_display]
     )
