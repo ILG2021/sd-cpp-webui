@@ -134,11 +134,9 @@ class SDServerManager:
                  reference_image=None, control_net_path=None, 
                  cache_mode="none", cache_option="", scm_mask="", scm_policy="none",
                  lora_list=None, **kwargs):
-        """Send a generation request to the native sdcpp API and poll for results"""
+        """Send a generation request to the native sdcpp API and poll for results (Generator)"""
         
         # 1. Prepare native payload
-        # Mapping UI names to API names
-        # Note: server expects "euler_a" etc. UI might send "euler"
         method = sampling_method.lower().replace("-", "_")
         
         payload = {
@@ -165,18 +163,15 @@ class SDServerManager:
             "output_compression": 100
         }
 
-        # Handle LoRAs
         if lora_list:
-            payload["lora"] = lora_list # Expected format: [{"path": "...", "multiplier": 1.0}]
+            payload["lora"] = lora_list
         else:
             payload["lora"] = []
 
-        # Handle images
         if reference_image and os.path.exists(reference_image):
             import base64
             with open(reference_image, "rb") as f:
                 img_b64 = base64.b64encode(f.read()).decode('utf-8')
-                # Determine if it's a control image or init image
                 if control_net_path:
                     payload["control_image"] = img_b64
                 else:
@@ -184,69 +179,29 @@ class SDServerManager:
 
         # 2. Submit job (Async)
         url_submit = f"http://{self.host}:{self.port}/sdcpp/v1/img_gen"
-        print(f"Submitting job to {url_submit}...")
+        yield f"正在提交任务到 {url_submit}..."
         
-        response = requests.post(url_submit, json=payload, timeout=30)
-        if response.status_code != 202:
-            raise RuntimeError(f"Failed to submit job: {response.text}")
+        try:
+            response = requests.post(url_submit, json=payload, timeout=30)
+            if response.status_code != 202:
+                yield f"服务器报错: {response.text}"
+                raise RuntimeError(f"Failed to submit job: {response.text}")
+        except Exception as e:
+            yield f"请求异常: {str(e)}"
+            raise e
         
         job_data = response.json()
         job_id = job_data["id"]
         poll_url = f"http://{self.host}:{self.port}{job_data['poll_url']}"
         
-        print(f"Job submitted: {job_id}. Polling...")
+        yield f"任务已提交 (ID: {job_id})，正在等待生成..."
 
         # 3. Poll for results
-        start_time = time.time()
-        timeout = 600 # 10 minutes
-        
-        while time.time() - start_time < timeout:
-            job_resp = requests.get(poll_url, timeout=10)
-            if job_resp.status_code != 200:
-                raise RuntimeError(f"Error polling job: {job_resp.text}")
-            
-            status_data = job_resp.json()
-            status = status_data["status"]
-            
-            if status == "completed":
-                print("Job completed!")
-                result = status_data.get("result")
-                if not result or "images" not in result:
-                    # In some versions it might be under data
-                    images = status_data.get("data", [])
-                else:
-                    images = result["images"]
-                
-                if not images:
-                    raise RuntimeError("Job completed but no images returned.")
-                
-                # Save first image
-                import base64
-                img_b64 = images[0]
-                if img_b64.startswith("data:"):
-                    img_b64 = img_b64.split(",")[1]
-                    
-                img_data = base64.b64decode(img_b64)
-                output_file = "output_server.png"
-                with open(output_file, "wb") as f:
-                    f.write(img_data)
-                return output_file
-            
-            elif status == "failed":
-                error_msg = status_data.get("error", "Unknown error")
-                raise RuntimeError(f"Job failed: {error_msg}")
-            
-            elif status == "cancelled":
-                raise RuntimeError("Job was cancelled.")
-            
-            # Progress update (optional: could yield here if integrated with generator)
-            print(f"Job status: {status}...")
-            time.sleep(1)
-            
-        raise TimeoutError("Job timed out.")
+        for update in self._poll_job(job_id, job_data["poll_url"], output_ext="png"):
+            yield update
 
     def generate_video(self, prompt, negative_prompt, video_frames, width, height, fps=6, **kwargs):
-        """Async video generation via /sdcpp/v1/vid_gen"""
+        """Async video generation via /sdcpp/v1/vid_gen (Generator)"""
         url_submit = f"http://{self.host}:{self.port}/sdcpp/v1/vid_gen"
         
         payload = {
@@ -260,49 +215,59 @@ class SDServerManager:
                 "sample_steps": kwargs.get("steps", 20),
                 "guidance": {"txt_cfg": kwargs.get("cfg_scale", 7.0)}
             },
-            "output_format": "webp" # Or mp4 if supported
+            "output_format": "webp"
         }
         
+        yield f"正在提交视频任务到 {url_submit}..."
         response = requests.post(url_submit, json=payload, timeout=30)
         if response.status_code != 202:
+            yield f"服务器报错: {response.text}"
             raise RuntimeError(f"Failed to submit video job: {response.text}")
             
-        # Polling logic similar to img_gen (omitted for brevity or can be refactored into a shared helper)
-        # For now, let's just use the same polling logic
         job_data = response.json()
-        # ... poll ...
-        # (Implementation would be similar to img_gen)
-        return self._poll_job(job_data["id"], job_data["poll_url"], output_ext="webp")
+        yield f"视频任务已提交 (ID: {job_data['id']})，正在等待生成..."
+        
+        for update in self._poll_job(job_data["id"], job_data["poll_url"], output_ext="webp"):
+            yield update
 
     def _poll_job(self, job_id, relative_poll_url, output_ext="png"):
         poll_url = f"http://{self.host}:{self.port}{relative_poll_url}"
         start_time = time.time()
-        timeout = 1200 # 20 minutes for video
+        timeout = 1200
         
         while time.time() - start_time < timeout:
-            job_resp = requests.get(poll_url, timeout=10)
-            status_data = job_resp.json()
-            status = status_data["status"]
-            
-            if status == "completed":
-                result = status_data.get("result", {})
-                # Video result might be in 'videos' or 'data'
-                data_list = result.get("videos") or result.get("images") or status_data.get("data", [])
+            try:
+                job_resp = requests.get(poll_url, timeout=10)
+                status_data = job_resp.json()
+                status = status_data["status"]
                 
-                if not data_list:
-                    raise RuntimeError("No output data found.")
+                if status == "completed":
+                    yield "任务已完成，正在接收数据..."
+                    result = status_data.get("result", {})
+                    data_list = result.get("videos") or result.get("images") or status_data.get("data", [])
+                    
+                    if not data_list:
+                        raise RuntimeError("No output data found.")
+                    
+                    import base64
+                    data_b64 = data_list[0]
+                    if data_b64.startswith("data:"):
+                        data_b64 = data_b64.split(",")[1]
+                    
+                    output_file = f"output_server.{output_ext}"
+                    with open(output_file, "wb") as f:
+                        f.write(base64.b64decode(data_b64))
+                    yield output_file
+                    return
                 
-                import base64
-                data_b64 = data_list[0]
-                if data_b64.startswith("data:"):
-                    data_b64 = data_b64.split(",")[1]
+                elif status in ["failed", "cancelled"]:
+                    err = status_data.get("error", "未知错误")
+                    yield f"任务 {status}: {err}"
+                    raise RuntimeError(f"Job {status}: {err}")
                 
-                output_file = f"output_server.{output_ext}"
-                with open(output_file, "wb") as f:
-                    f.write(base64.b64decode(data_b64))
-                return output_file
-            elif status in ["failed", "cancelled"]:
-                raise RuntimeError(f"Job {status}: {status_data.get('error')}")
+                yield f"当前状态: {status}..."
+            except Exception as e:
+                yield f"轮询异常: {str(e)}"
             
             time.sleep(1)
         raise TimeoutError("Job timed out.")

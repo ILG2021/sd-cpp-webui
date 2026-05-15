@@ -91,18 +91,29 @@ def generate_call(model_name, prompt, negative_prompt, width, height, seed,
             clean_p, lora_list = parse_loras_from_prompt(prompt)
             
             if config["type"] == "vid_gen":
-                output_file = server_manager.generate_video(
+                gen_proc = server_manager.generate_video(
                     clean_p, negative_prompt, video_frames, width, height,
                     steps=params["steps"], cfg_scale=params["cfg-scale"]
                 )
             else:
-                output_file = server_manager.generate(
+                gen_proc = server_manager.generate(
                     clean_p, negative_prompt, params["steps"], params["cfg-scale"], width, height, params["sampling-method"], params["seed"],
                     reference_image=reference_image, control_net_path=control_net_path,
                     cache_mode=cache_mode, cache_option=cache_option, scm_mask=scm_mask, scm_policy=scm_policy,
                     lora_list=lora_list
                 )
-            yield output_file, "生成成功 (服务器模式)。"
+            
+            output_file = None
+            for update in gen_proc:
+                if isinstance(update, str) and (update.endswith(".png") or update.endswith(".webp")):
+                    output_file = update
+                else:
+                    yield None, update
+            
+            if output_file:
+                yield output_file, "生成成功 (服务器模式)。"
+            else:
+                yield None, "服务器模式未返回文件。"
             return
         except Exception as e:
             import traceback
