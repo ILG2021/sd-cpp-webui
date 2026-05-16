@@ -29,6 +29,35 @@
                 "offload-to-cpu": true
             }
         },
+        "Z-Image-Turbo-4G-Vram": {
+            "type": "txt2img",
+            "files": {
+                "diffusion-model": {
+                    "repo": "leejet/Z-Image-Turbo-GGUF",
+                    "filename": "z_image_turbo-Q4_0.gguf",
+                    "local_path": "models/Z-Image-Turbo/z_image_turbo-Q4_0.gguf"
+                },
+                "vae": {
+                    "repo": "Tongyi-MAI/Z-Image-Turbo",
+                    "subfolder": "vae",
+                    "filename": "diffusion_pytorch_model.safetensors",
+                    "local_path": "models/Z-Image-Turbo/ae.safetensors"
+                },
+                "llm": {
+                    "repo": "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+                    "filename": "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+                    "local_path": "models/Z-Image-Turbo/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+                }
+            },
+            "default_params": {
+                "cfg-scale": 1.0,
+                "steps": 9,
+                "W": 1024,
+                "H": 1024,
+                "diffusion-fa": true,
+                "offload-to-cpu": true
+            }
+        },
         "Z-Image": {
             "type": "txt2img",
             "files": {
