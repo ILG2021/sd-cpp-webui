@@ -241,8 +241,15 @@ with gr.Blocks(title="SD.cpp 桌面版 WebUI") as demo:
         with gr.Tab("🎬 视频生成"):
             create_gen_tab(VIDEO_MODELS, is_video=True)
 
+import argparse
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root-path", type=str, default="", help="Gradio root path prefix")
+    args = parser.parse_args()
+
     if platform.system() == "Windows":
         print("window")
         win_install_drivers()
-    demo.queue().launch(inbrowser=True)
+
+    demo.queue().launch(inbrowser=True, root_path=args.root_path)

@@ -30,14 +30,6 @@ pip install -r requirements.txt
 python app.py
 ```
 
-## 显卡加速 (CUDA)
-为了获得最佳性能，建议安装 CUDA 版本的 Python 绑定：
-```powershell
-$env:CMAKE_BUILD_PARALLEL_LEVEL = "24"  # 设置你的 CPU 核心数
-$env:CMAKE_ARGS = "-DSD_CUDA=ON"
-pip install stable-diffusion-cpp-python --force-reinstall --no-cache-dir -v
-```
-
 ## 目录结构
 - `app.py`: 主程序 (Gradio 界面)
 - `utils/sd_python_manager.py`: 持久化模型管理器 (Python 绑定)
@@ -47,3 +39,10 @@ pip install stable-diffusion-cpp-python --force-reinstall --no-cache-dir -v
 ## 进阶功能
 - **持久化加载**：模型加载后会驻留在显存中，后续生成无需再次加载。切换模型时会自动更新。点击界面上的“卸载模型”可以手动释放显存。
 - **LoRA**：支持在提示词中使用 `<lora:文件名:权重>` 语法。需在高级选项中正确配置 LoRA 目录。
+
+## 编译wheel
+```powershell
+$env:CMAKE_BUILD_PARALLEL_LEVEL = "24"
+$env:CMAKE_ARGS = "-DSD_CUDA=ON"
+pip wheel stable-diffusion-cpp-python --no-deps --no-cache-dir -w ./dist
+```
