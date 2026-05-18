@@ -18,3 +18,5 @@ outputs/
 *.ckpt
 *.onnx
 *.engine
+.idea
+.vscode
