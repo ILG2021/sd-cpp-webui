@@ -259,7 +259,7 @@
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.2-dev",
-                    "filename": "flux2_ae.safetensors",
+                    "filename": "diffusion_pytorch_model.safetensors",
                     "local_path": "models/Flux_2-klein-4B/flux2_ae.safetensors"
                 },
                 "llm": {
@@ -288,7 +288,7 @@
                 },
                 "vae": {
                     "repo": "black-forest-labs/FLUX.2-dev",
-                    "filename": "flux2_ae.safetensors",
+                    "filename": "diffusion_pytorch_model.safetensors",
                     "local_path": "models/Flux_2-klein-9B/flux2_ae.safetensors"
                 },
                 "llm": {

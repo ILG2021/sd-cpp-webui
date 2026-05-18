@@ -238,8 +238,8 @@ with gr.Blocks(title="SD.cpp 桌面版 WebUI") as demo:
         with gr.Tab("🖼️ 图片生成"):
             create_gen_tab(IMAGE_MODELS, is_video=False)
             
-        with gr.Tab("🎬 视频生成"):
-            create_gen_tab(VIDEO_MODELS, is_video=True)
+        # with gr.Tab("🎬 视频生成"):
+        #     create_gen_tab(VIDEO_MODELS, is_video=True)
 
 import argparse
 
