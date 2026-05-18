@@ -294,9 +294,9 @@
                     "local_path": "models/Flux_2-klein-9B/flux2_ae.safetensors"
                 },
                 "llm": {
-                    "repo": "unsloth/Qwen3-4B-GGUF",
-                    "filename": "Qwen3-4B-Q8_0.gguf",
-                    "local_path": "models/Flux_2-klein-4B/Qwen3-4B-Q8_0.gguf"
+                    "repo": "unsloth/Qwen3-8B-GGUF",
+                    "filename": "Qwen3-8B-Q8_0.gguf",
+                    "local_path": "models/Flux_2-klein-4B/Qwen3-8B-Q8_0.gguf"
                 }
             },
             "default_params": {
